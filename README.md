@@ -11,3 +11,5 @@ This crate is part of the [AWS SDK for Rust](https://awslabs.github.io/aws-sdk-r
 # Additional details
 
 Forked from [smithy-rs](https://github.com/awslabs/smithy-rs) (official aws rust SDK) - to support wasm32 compilation targets.
+
+Source code based on release tag [release-2023-08-22](https://github.com/awslabs/smithy-rs/releases/tag/release-2023-08-22).
