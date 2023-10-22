@@ -13,44 +13,54 @@ use wasm_timer::SystemTime;
 use time::{OffsetDateTime, Time};
 
 /// Truncates the subseconds from the given `SystemTime` to zero.
+#[cfg(not(target_arch = "wasm32"))]
+pub(crate) fn truncate_subsecs(time: SystemTime) -> SystemTime {
+    let date_time = OffsetDateTime::from(time);
+    let time = date_time.time();
+    date_time
+        .replace_time(
+            Time::from_hms(time.hour(), time.minute(), time.second()).expect("was already a time"),
+        )
+        .into()
+}
+#[cfg(target_arch = "wasm32")]
 pub(crate) fn truncate_subsecs(time: SystemTime) -> SystemTime {
     time
-
-    // let date_time = OffsetDateTime::from(time);
-    // let time = date_time.time();
-    // date_time
-    //     .replace_time(
-    //         Time::from_hms(time.hour(), time.minute(), time.second()).expect("was already a time"),
-    //     )
-    //     .into()
 }
 
 /// Formats a `SystemTime` in `YYYYMMDD` format.
+#[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn format_date(time: SystemTime) -> String {
-    "hi".into()
-
-    // let time = OffsetDateTime::from(time);
-    // format!(
-    //     "{:04}{:02}{:02}",
-    //     time.year(),
-    //     u8::from(time.month()),
-    //     time.day()
-    // )
+    let time = OffsetDateTime::from(time);
+    format!(
+        "{:04}{:02}{:02}",
+        time.year(),
+        u8::from(time.month()),
+        time.day()
+    )
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn format_date(time: SystemTime) -> String {
+    "".into() // TODO: implement
 }
 
 /// Formats a `SystemTime` in `YYYYMMDD'T'HHMMSS'Z'` format.
+#[cfg(not(target_arch = "wasm32"))]
 pub(crate) fn format_date_time(time: SystemTime) -> String {
-    "hi".into()
-    // let time = OffsetDateTime::from(time);
-    // format!(
-    //     "{:04}{:02}{:02}T{:02}{:02}{:02}Z",
-    //     time.year(),
-    //     u8::from(time.month()),
-    //     time.day(),
-    //     time.hour(),
-    //     time.minute(),
-    //     time.second()
-    // )
+    let time = OffsetDateTime::from(time);
+    format!(
+        "{:04}{:02}{:02}T{:02}{:02}{:02}Z",
+        time.year(),
+        u8::from(time.month()),
+        time.day(),
+        time.hour(),
+        time.minute(),
+        time.second()
+    )
+}
+#[cfg(target_arch = "wasm32")]
+pub(crate) fn format_date_time(time: SystemTime) -> String {
+    "".into() // TODO: implement
 }
 
 /// Parse functions that are only needed for unit tests.
